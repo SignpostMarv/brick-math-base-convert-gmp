@@ -33,7 +33,16 @@ class GmpCalculator extends Calculator
 	 */
 	public function divQR(string $a, string $b) : array
 	{
-		[$q, $r] = \gmp_div_qr($a, $b);
+		$maybe = $this->MaybeEarlyExitDivQR($a, $b);
+
+		if ( ! is_null($maybe)) {
+			return $maybe;
+		}
+
+		[$q, $r] = \gmp_div_qr(
+			\gmp_init($a),
+			\gmp_init($b)
+		);
 
 		return [
 			\gmp_strval($q),

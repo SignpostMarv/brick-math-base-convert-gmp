@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SignpostMarv\Brick\Math\Calculator;
 
 use InvalidArgumentException;
+use function preg_match;
 use SignpostMarv\Brick\Math\Calculator;
 
 /**
@@ -37,6 +38,18 @@ class GmpCalculator extends Calculator
 
 		if ( ! is_null($maybe)) {
 			return $maybe;
+		} elseif (1 === preg_match('/[\-\+]?\d+\.\d+$/', $a)) {
+			throw new InvalidArgumentException(
+				'Argument 1 passed to ' .
+				__METHOD__ .
+				'() must be an integer-string!'
+			);
+		} elseif (1 === preg_match('/[\-\+]?\d+\.\d+$/', $b)) {
+			throw new InvalidArgumentException(
+				'Argument 2 passed to ' .
+				__METHOD__ .
+				'() must be an integer-string!'
+			);
 		}
 
 		[$q, $r] = \gmp_div_qr(
